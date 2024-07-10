@@ -31,8 +31,6 @@
 
                     <input id="select-year-detail"  th:value="${boards.boardYear}" type="text" placeholder="ex)1999" readonly
                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="4">년
-
-
                     <select id="select-visibility-detail" name="boardPublic">
                         <option th:value="'O'" th:text="공개"></option>
                         <option th:value="'X'" th:text="비공개"></option>
