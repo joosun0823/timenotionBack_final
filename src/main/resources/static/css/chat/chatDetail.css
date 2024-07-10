@@ -116,13 +116,23 @@
 
 /* 전송 버튼 */
 .chat-footer button {
-    padding: 12px 10px;
     border: none;
     border-radius: 8px;
     background-color: #5AB6D9;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease; /* 배경색 변경 시 부드럽게 전환 */
+    width: 60px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-footer button img{
+    width: 57%;
+    height: 65%;
+    object-fit: cover;
 }
 
 .chat-footer button:hover {
@@ -158,14 +168,26 @@
     width: 100%;
     margin-bottom: 10px;
 }
-
+/* 목록으로 돌아가기 버튼 */
 .back-icon-img-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 35px;
     height: 35px;
     border-radius: 8px;
     background-color: #dbdbdb;
     margin-right: 12px;
     cursor: pointer;
+    transition-duration: 0.25s;
+}
+.back-icon-img-box img{
+    width: 32%;
+    height: 32%;
+    object-fit: cover;
+}
+.back-icon-img-box:hover{
+    background-color: #c6c6c6;
 }
 .back-icon-text{
     font-size: 13px;

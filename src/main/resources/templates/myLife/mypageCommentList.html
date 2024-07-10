@@ -23,13 +23,12 @@
               <div class="profile-background">
                 <div class="profile-background-dark"></div>
                 <div class="profile-bg-img-box">
-                  <img th:if="${userInfo.userFileBackSource != null}" th:src="${userInfo.userFileBackSource}" alt="배경사진" class="img-back-img">
-                  <img th:unless="${userInfo.userFileBackSource != null}" src="/img/main/basic-background3.png" alt="기본 배경사진" class="img-back-img">
+
                 </div>
                 <div class="profile">
-                  <div class="profile-img-box">
-                    <img th:if="${userInfo.userFileProfileSource != null}" th:src="${userInfo.userFileProfileSource}" alt="프로필사진" class="img-profile-img">
-                    <img th:unless="${userInfo.userFileProfileSource != null}" src="/img/main/basic-profile.png" alt="기본 프로필 사진" class="img-profile-img">          </div>
+                  <div class="box-profile-img-a">
+
+                  </div>
                   <div class="profile-detail">
                     <p id="profile-nickname" th:text="${userInfo.nickname}" >장윤근</p>
                     <p>

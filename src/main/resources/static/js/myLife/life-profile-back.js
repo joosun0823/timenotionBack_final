@@ -1,5 +1,5 @@
 /* --------------------------------------- 프사 / 배사 */
-/* userpage에서 씀 */
+/* userpage에서 씀 , 파생페이지에도 씀 */
 console.log("들어왔어요~ ");
 let uniId = document.querySelector('#uniId').value; // 유저아이디 가져옴
 AjaxOfUserFile();

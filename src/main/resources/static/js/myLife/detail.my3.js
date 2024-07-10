@@ -346,6 +346,10 @@ function AjaxOfUserFile() {
             profileTags = `
                     <img src="/v1/user-files?fileName=${profileFileName}" alt="프로필사진" class="img-profile-img">
                 `;
+          }else{
+            profileTags = `
+                    <img src="/img/main/basic-profile.png" alt="기본 프로필 사진" class="img-profile-img">
+                `;
           }
         }else{
           profileTags = `

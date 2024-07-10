@@ -173,6 +173,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-weight: 500;
+}
+.edit-id-box:first-child{
+  font-weight: 500;
 }
 .edit-id-paragraph{
   font-weight: bolder ;
@@ -346,6 +350,7 @@
 }
 .edit-nickname-box p{
   margin-bottom: 10px;
+  font-weight: 500;
 }
 .edit-nickname-box input{
   border: 1px solid grey;
@@ -433,6 +438,7 @@
 
 
 /* 생년월일 */
+
 .edit-birth-box{
   /* background-color: lightseagreen; */
   height: 70px;
@@ -440,6 +446,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-weight: 500;
 }
 .edit-birth-year , .edit-birth-day, .edit-birth-month{
   width: 80px;

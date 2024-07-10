@@ -18,10 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Transactional
@@ -200,6 +198,19 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public LifeUserInfoDTO selectAllInfo(Long userId) {
         return myPageMapper.selectAllInfo(userId);
+    }
+
+    /* 생일 쪼개서 가져오기 */
+    @Override
+    public Map<String, Integer> sliceBirth(Long userId) {
+        LifeUserInfoDTO userInfo = selectAllInfo(userId);
+        LocalDateTime birthDate = userInfo.getUserBirth();
+
+        Map<String, Integer> birthDateMap = new HashMap<>();
+        birthDateMap.put("year", birthDate.getYear());
+        birthDateMap.put("month", birthDate.getMonthValue());
+        birthDateMap.put("day", birthDate.getDayOfMonth());
+        return birthDateMap;
     }
 
     // 6. 마이페이지 페이징 - 윤근님꺼

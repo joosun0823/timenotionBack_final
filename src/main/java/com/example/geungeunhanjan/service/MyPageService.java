@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.swing.plaf.multi.MultiListUI;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface MyPageService {
     // 1. 내 좋아요 목록 select
@@ -47,6 +48,7 @@ public interface MyPageService {
 
     /* 5. 회원 정보 셀렉트 : 파일, 유저, 유니, 카카오 */
     LifeUserInfoDTO selectAllInfo (Long userId);
+    Map<String, Integer> sliceBirth(Long userId);
 
     // 6. 마이페이지 페이징 - 윤근님꺼
     List<BoardVO> selectMypagePaging(Criteria criteria, Long userId);

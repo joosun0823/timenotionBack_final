@@ -7,10 +7,10 @@
     <!-- 나의 일대기 게시글 수정 -->
     <update id="updateBoard" parameterType="BoardVO">
         UPDATE GGHJ_BOARD
-        SET BOARD_TITLE        = #{boardTitle},
-            BOARD_PUBLIC       = #{boardPublic},
-            BOARD_UPDATED_DATE = SYSDATE,
-            BOARD_CONTENT      = #{boardContent}
+        SET BOARD_TITLE = #{boardTitle},
+            BOARD_CONTENT = #{boardContent},
+            BOARD_PUBLIC = #{boardPublic},
+            BOARD_UPDATED_DATE = SYSDATE
         WHERE BOARD_ID = #{boardId}
     </update>
 

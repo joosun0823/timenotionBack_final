@@ -19,4 +19,10 @@ public class LifeUserInfoDTO {
     private String userFileProfileSource;
     private String userFileBackSource;
 
+
+    /* 생일 */
+    private int birthYear;
+    private int birthMonth;
+    private int birthDay;
+
 }

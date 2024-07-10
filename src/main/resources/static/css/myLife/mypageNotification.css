@@ -87,14 +87,14 @@ header {
   margin-left: 20px;
 }
 /*[[[1*/
-.profile-img-box {
+.box-profile-img-a      {
   width: 130px;
   height: 135px;
   overflow: hidden;
   border-radius: 12%;
   margin-top: 15px;
 }
-.profile-img-box img{
+.box-profile-img-a img{
   width: 100%;
   height: 100%;
   object-fit: cover;

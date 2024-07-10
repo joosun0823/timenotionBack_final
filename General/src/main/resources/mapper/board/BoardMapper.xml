@@ -128,9 +128,10 @@
 
     <!--    메인 화면 4개 게시글-->
     <select id="mainBoardbyViews" resultType="BoardMainDTO">
-        <![CDATA[
+    <![CDATA[
         SELECT
             board_id,
+            user_id,
             board_title,
             board_content,
             board_file_source_name,
@@ -143,6 +144,7 @@
         FROM (
                  SELECT
                      board_id,
+                     user_id,
                      board_title,
                      board_content,
                      board_file_source_name,
@@ -156,140 +158,131 @@
                  FROM (
                           SELECT
                               b.board_id,
+                              b.user_id,
                               b.board_title,
                               b.board_content,
                               bf.board_file_source_name,
                               bf.board_file_name,
-                              COALESCE(u.user_nickname, k.name) AS user_nickname,
-                              RANK() OVER (ORDER BY b.board_view_count DESC) AS board_rank,
+                              COALESCE(gu.nickname, u.user_nickname, k.name) AS user_nickname,
+                              DENSE_RANK() OVER (ORDER BY b.board_view_count DESC) AS board_rank,
                                   FIRST_VALUE(COALESCE(k.PROFILE_PIC, uf.USER_FILE_PROFILE_SOURCE)) OVER (PARTITION BY b.board_id ORDER BY b.board_id) AS USER_FILE_PROFILE_SOURCE,
                                   b.board_created_date,
                               b.board_view_count
                           FROM
                               gghj_board b
-                                  FULL OUTER JOIN gghj_board_file bf ON b.board_id = bf.board_id
-                                  FULL OUTER JOIN gghj_uni gu ON b.user_id = gu.user_id OR b.user_id = gu.kakao_id
-                                  FULL OUTER JOIN gghj_user u ON gu.user_id = u.user_id
+                                  LEFT JOIN gghj_board_file bf ON b.board_id = bf.board_id
+                                  LEFT JOIN gghj_uni gu ON b.user_id = gu.uni_id
+                                  LEFT JOIN gghj_user u ON gu.user_id = u.user_id
                                   LEFT JOIN gghj_kakao k ON gu.kakao_id = k.kakao_id
-                                  FULL OUTER JOIN GGHJ_USER_FILE uf ON gu.uni_id = uf.USER_ID
+                                  LEFT JOIN gghj_user_file uf ON gu.uni_id = uf.user_id
+                          WHERE
+                              b.board_id IN (
+                                  SELECT
+                                      board_id
+                                  FROM (
+                                           SELECT
+                                               board_id,
+                                               RANK() OVER (ORDER BY board_view_count DESC, board_created_date DESC) AS board_rank
+                                           FROM
+                                               gghj_board
+                                           ORDER BY
+                                               board_view_count DESC,
+                                               board_created_date DESC
+                                       )
+                                  WHERE
+                                      ROWNUM <= 4
+                              )
                       ) ranked_boards
-                 WHERE board_id IN (
-                     SELECT board_id
-                     FROM (
-                              SELECT
-                                  board_id,
-                                  RANK() OVER (ORDER BY board_view_count DESC) AS board_rank
-                              FROM
-                                  gghj_board
-                          ) ranked_boards
-                     WHERE board_rank <= 4
-                 )
              ) ranked_boards_with_row_num
         WHERE
             row_num <= 4
         ORDER BY
-            board_rank, board_id
-        ]]>
-    </select>
-
-    <!--    메인 배너 왼쪽 배너-->
-    <select id="mainLeftBannerSelect" resultType="BoardMainDTO">
-    <![CDATA[
-        SELECT
-            board_id,
-            board_title,
-            board_content,
-            board_file_source_name,
-            board_file_name,
-            user_nickname,
             board_rank,
-            USER_FILE_PROFILE_SOURCE,
-            board_created_date,
-            board_view_count
-        FROM (
-                 SELECT
-                     b.board_id,
-                     b.board_title,
-                     b.board_content,
-                     bf.board_file_source_name,
-                     bf.board_file_name,
-                     COALESCE(u.user_nickname, k.name) AS user_nickname,
-                     DENSE_RANK() OVER (ORDER BY b.board_view_count DESC) AS board_rank,
-                         FIRST_VALUE(COALESCE(k.PROFILE_PIC, uf.USER_FILE_PROFILE_SOURCE)) OVER (PARTITION BY b.board_id ORDER BY b.board_id) AS USER_FILE_PROFILE_SOURCE,
-                         b.board_created_date,
-                     b.board_view_count
-                 FROM
-                     gghj_board b
-                         FULL OUTER JOIN gghj_board_file bf ON b.board_id = bf.board_id
-                         FULL OUTER JOIN gghj_uni gu ON b.user_id = gu.user_id OR b.user_id = gu.kakao_id
-                         FULL OUTER JOIN gghj_user u ON gu.user_id = u.user_id
-                         LEFT JOIN gghj_kakao k ON gu.kakao_id = k.kakao_id
-                         FULL OUTER JOIN GGHJ_USER_FILE uf ON gu.uni_id = uf.USER_ID
-                 WHERE
-                     b.board_id IS NOT NULL
-             ) ranked_boards
-        WHERE
-            board_rank <= 1 AND rownum = 1
-        ORDER BY
-            board_rank
+            board_id
         ]]>
 </select>
 
-    <!--    메인 오른쪽 배너 2개-->
-    <select id="mainRightBannerSelect" resultType="BoardMainDTO">
-        <![CDATA[
+
+    <!--    메인 배너 왼쪽 배너-->
+    <select id="mainLeftBannerSelect" resultType="BoardMainDTO">
         SELECT
-            board_id,
-            board_title,
-            board_content,
-            board_file_source_name,
-            board_file_name,
-            user_nickname,
-            board_rank,
-            USER_FILE_PROFILE_SOURCE,
-            board_created_date,
-            board_view_count
+            b.board_id,
+            b.board_title,
+            b.board_content,
+            b.board_created_date,
+            b.board_view_count,
+            b.board_like_count,
+            b.user_id,
+            bf.board_file_name,
+            bf.board_file_source_name,
+            bf.board_file_uuid,
+            COALESCE(gu.nickname, u.user_nickname, k.name) AS user_nickname,
+            uf.user_file_profile_name,
+            uf.user_file_profile_source,
+            uf.user_file_profile_uuid,
+            COALESCE(k.profile_pic, uf.user_file_profile_source) AS user_profile_pic
         FROM (
                  SELECT
-                     board_id,
-                     board_title,
-                     board_content,
-                     board_file_source_name,
-                     board_file_name,
-                     user_nickname,
-                     board_rank,
-                     USER_FILE_PROFILE_SOURCE,
-                     board_created_date,
-                     board_view_count
-                 FROM (
-                          SELECT
-                              b.board_id,
-                              b.board_title,
-                              b.board_content,
-                              bf.board_file_source_name,
-                              bf.board_file_name,
-                              COALESCE(u.user_nickname, k.name) AS user_nickname,
-                              ROW_NUMBER() OVER (ORDER BY b.board_view_count DESC) AS board_rank,
-                                  FIRST_VALUE(COALESCE(k.PROFILE_PIC, uf.USER_FILE_PROFILE_SOURCE)) OVER (PARTITION BY b.board_id ORDER BY b.board_id) AS USER_FILE_PROFILE_SOURCE,
-                                  b.board_created_date,
-                              b.board_view_count
-                          FROM
-                              gghj_board b
-                                  FULL OUTER JOIN gghj_board_file bf ON b.board_id = bf.board_id
-                                  FULL OUTER JOIN gghj_uni gu ON b.user_id = gu.user_id OR b.user_id = gu.kakao_id
-                                  FULL OUTER JOIN gghj_user u ON gu.user_id = u.user_id
-                                  LEFT JOIN gghj_kakao k ON gu.kakao_id = k.kakao_id
-                                  FULL OUTER JOIN GGHJ_USER_FILE uf ON gu.uni_id = uf.USER_ID
-                          WHERE
-                              b.board_id IS NOT NULL
-                            AND b.board_title IS NOT NULL
-                            AND b.board_content IS NOT NULL
-                            AND COALESCE(u.user_nickname, k.name) IS NOT NULL
-                      ) ranked_boards
-                 WHERE board_rank BETWEEN 2 AND 3
-             ) final_boards
-        ]]>
+                     b1.board_id,
+                     ROW_NUMBER() OVER (ORDER BY board_view_count DESC) AS board_rank
+                 FROM
+                     gghj_board b1
+                         JOIN GGHJ_BOARD_FILE f ON b1.board_id = f.board_id
+                 WHERE f.board_file_name IS NOT NULL OR
+                     f.board_file_source_name IS NOT NULL OR
+                     f.board_file_uuid IS NOT NULL
+             ) rb
+                 JOIN gghj_board b ON rb.board_id = b.board_id
+                 LEFT JOIN gghj_board_file bf ON b.board_id = bf.board_id
+                 LEFT JOIN gghj_uni gu ON b.user_id = gu.uni_id
+                 LEFT JOIN gghj_user u ON gu.user_id = u.user_id
+                 LEFT JOIN gghj_kakao k ON gu.kakao_id = k.kakao_id
+                 LEFT JOIN gghj_user_file uf ON gu.uni_id = uf.user_id
+        WHERE  rb.board_rank = 1
+        ORDER BY rb.board_rank
     </select>
+
+    <!--    메인 오른쪽 배너 2개-->
+    <!-- mainRightBannerSelect.xml (SQL 매퍼 파일) -->
+    <select id="mainRightBannerSelect" resultType="BoardMainDTO">
+        SELECT
+            b.board_id,
+            b.board_title,
+            b.board_content,
+            b.board_created_date,
+            b.board_view_count,
+            b.board_like_count,
+            b.user_id,
+            bf.board_file_name,
+            bf.board_file_source_name,
+            bf.board_file_uuid,
+            COALESCE(gu.nickname, u.user_nickname, k.name) AS user_nickname,
+            uf.user_file_profile_name,
+            uf.user_file_profile_source,
+            uf.user_file_profile_uuid,
+            COALESCE(k.profile_pic, uf.user_file_profile_source) AS user_profile_pic,
+            rb.board_rank
+        FROM (
+                 SELECT
+                     b1.board_id,
+                     ROW_NUMBER() OVER (ORDER BY board_view_count DESC) AS board_rank
+                 FROM
+                     gghj_board b1
+                         JOIN GGHJ_BOARD_FILE f ON b1.board_id = f.board_id
+                 WHERE f.board_file_name IS NOT NULL OR
+                     f.board_file_source_name IS NOT NULL OR
+                     f.board_file_uuid IS NOT NULL
+             ) rb
+                 JOIN gghj_board b ON rb.board_id = b.board_id
+                 LEFT JOIN gghj_board_file bf ON b.board_id = bf.board_id
+                 LEFT JOIN gghj_uni gu ON b.user_id = gu.uni_id
+                 LEFT JOIN gghj_user u ON gu.user_id = u.user_id
+                 LEFT JOIN gghj_kakao k ON gu.kakao_id = k.kakao_id
+                 LEFT JOIN gghj_user_file uf ON gu.uni_id = uf.user_id
+        WHERE  rb.board_rank BETWEEN 2 AND 3
+        ORDER BY rb.board_rank
+    </select>
+
 
     <!-- 나의 일대기 게시판 데이터 입력하기 -->
     <insert id="insertBoard" parameterType="BoardVO">

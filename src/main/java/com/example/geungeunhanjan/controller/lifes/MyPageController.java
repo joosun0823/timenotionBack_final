@@ -358,11 +358,18 @@ public class MyPageController {
         if (uniId == null) {
             return "redirect:/login";
         }
+
+
+        /* 회원정보 불러오기 */
         LifeUserInfoDTO userInfo = myPageService.selectAllInfo(uniId);
-        System.out.println(uniId);
         model.addAttribute("userInfo", userInfo);
         model.addAttribute("lifeUserUpdateDTO", lifeUserUpdateDTO);
-        System.out.println(lifeUserUpdateDTO);
+
+        /* 생일 쪼개서 가져오기  -- 하다가 기존꺼랑 문제생길거같아서 걍 넘김 (07/10)*/
+//        Map<String, Integer>  userBirth = myPageService.sliceBirth(uniId);
+//        model.addAttribute("birthYear", userBirth.get("year"));
+//        model.addAttribute("birthMonth", userBirth.get("month"));
+//        model.addAttribute("birthDay", userBirth.get("day"));
         return "/myLife/mypageEditMemberInformation";
     }
 
@@ -394,6 +401,7 @@ public class MyPageController {
         if(infoDTO.getUniAbout() == null || lifeUserUpdateDTO.getUniAbout().isEmpty()){
             lifeUserUpdateDTO.setUniAbout(infoDTO.getUniAbout());
         }
+
         String formattedDate = String.format("%s-%02d-%02d", year, Integer.parseInt(month), Integer.parseInt(day));
         LocalDate birthDate = LocalDate.parse(formattedDate);
         infoDTO.setUserBirth(birthDate.atStartOfDay());
@@ -410,6 +418,8 @@ public class MyPageController {
             file = Collections.emptyList();
         }
 */
+
+
 // 하.. 프사 배사 나눠서 내일 다시하자...
         try {
             myPageService.registProfileBackFile(userFileVO, profileImage, backgroundImage);
@@ -418,7 +428,6 @@ public class MyPageController {
             redirectAttributes.addFlashAttribute("errorMessage", "파일 업로드 실패");
             return "redirect:/myLife/mypageEditMemberInformation"; // 파일 업로드 실패 시 리다이렉트
         }
-        System.out.println(userFileVO.getUserFileProfileName());
 
         try {
             myPageService.totalUpdateInfo(lifeUserUpdateDTO);

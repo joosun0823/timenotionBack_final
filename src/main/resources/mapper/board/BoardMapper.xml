@@ -543,6 +543,7 @@
 <!--    </select>-->
 
     <!-- 나의 일대기 게시글 수정 -->
+    <!-- 나의 일대기 게시글 수정 -->
     <update id="updateBoard" parameterType="BoardVO">
         UPDATE GGHJ_BOARD
         SET BOARD_TITLE = #{boardTitle},
