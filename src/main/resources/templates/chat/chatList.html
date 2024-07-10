@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +14,6 @@
     <script defer th:src="@{/js/chat/chat.js}"></script>
     <script defer th:src="@{/js/chat/chat-img.js}"></script>
 </head>
-
 <body>
 <div th:replace="~{/fragment/header::header}"></div>
 <!-- 공지 전체 감싸는 div -->
@@ -37,44 +35,72 @@
                 <span class="contents-nickname">수신자</span>
             </div>
             <div class="contents-next-content">
-<!--                <span class="contents-date">작성시간</span>-->
+                <!-- <span class="contents-date">작성시간</span> -->
             </div>
         </div>
         <!-- 각 채팅방 목록을 반복해서 출력 -->
-        <div class="chat-wrapper"  th:each="room : ${chatRooms}">
-            <input type="hidden" th:value="${room.roomId}"  id="roomId">
-            <input type="hidden" th:value="${room.receiverId}" id="receiverId2">
-            <div class="chat-li-content">
-                <!-- 앞쪽 -->
-                <div class="prev-wrap">
-                    <!-- 1. 프로필 사진  -->
-                    <a class="profile-list-img-box" th:href="@{/yourLife/userpage/{receiverId}(receiverId=${room.receiverId})}">
+        <!-- 세션 id가 다른 계정한테 메세지를 보낸 리스트 -->
+        <div class="chat-wrapper" th:each="room, iter : ${chatRooms}">
+            <!-- 내가 보낸 메시지 -->
+            <div th:if="${session.uniId == room.senderId}">
+                <input type="hidden" th:value="${room.roomId}" id="roomId1">
+                <input type="hidden" th:value="${room.receiverId}" id="receiverId2">
+                <div class="chat-li-content">
+                    <!-- 앞쪽 -->
+                    <div class="prev-wrap">
+                        <!-- 1. 프로필 사진 -->
+                        <a class="profile-list-img-box" th:href="@{/yourLife/userpage/{receiverId}(receiverId=${room.receiverId})}">
+                            <img src="/img/main/basic-profile.png" alt="기본 프로필 사진" class="img-profile-img">
+                        </a>
+                        <!-- 2. 닉네임 / 컨텐츠 박스 / 시간 -->
+                        <div class="content-box">
+                            <a class="nickname2" th:text="${room.receiverNickname}"
+                               th:href="@{/yourLife/userpage/{receiverId}(receiverId=${room.receiverId})}">닉네임</a>
+                        </div>
+                    </div>
+                    <!-- 뒤쪽-->
+                    <!-- 3. 버튼 -->
+                    <a class="next-wrap" th:href="@{'/chat/room/' + ${room.roomId}}">
+                        <div class="submit-default">
+                            <img th:src="@{/img/main/submitButton.png}" alt="Submit Button Image">
+                        </div>
+                        <div class="hovers">채팅하기</div>
                     </a>
-                    <!-- 2. 닉네임 / 컨텐츠 박스 / 시간 -->
-                    <div class="content-box">
-                        <a class="nickname2" th:if="${session.uniId == room.senderId}" th:text="${room.receiverNickname}"
-                             th:href="@{/yourLife/userpage/{receiverId}(receiverId=${room.receiverId})}">닉네임</a>
-                      <!--  <div class="conversation-box">
-                            <span class="conversation" >ㅎㅎ</span>
-                            <span class="cv-time">12분 전</span>
-                        </div>-->
-                    </div>
                 </div>
-
-                <!-- 뒤쪽-->
-                <!-- 3. 버튼 -->
-                <a class="next-wrap" th:href="@{'/chat/room/' + ${room.roomId}}">
-                    <div class="submit-default">
-                        <img th:src="@{/img/main/submitButton.png}" alt="Submit Button Image">
-                    </div>
-                    <div class="hovers">채팅하기</div>
-                </a>
+                <hr class="chatList-hr">
             </div>
-            <hr class="chatList-hr">
+            <!-- 내가 받은 메시지 -->
+            <div th:unless="${session.uniId == room.senderId}">
+                <input type="hidden" th:value="${room.roomId}" id="roomId2">
+                <input type="hidden" th:value="${room.senderId}" id="senderId">
+                <div class="chat-li-content">
+                    <!-- 앞쪽 -->
+                    <div class="prev-wrap">
+                        <!-- 1. 프로필 사진 -->
+                        <a class="profile-list-img-box" th:href="@{/yourLife/userpage/{senderId}(senderId=${room.senderId})}">
+                            <img src="/img/main/basic-profile.png" alt="기본 프로필 사진" class="img-profile-img">
+                        </a>
+                        <!-- 2. 닉네임 / 컨텐츠 박스 / 시간 -->
+                        <div class="content-box">
+                            <a class="nickname2" th:text="${room.senderNickname}"
+                               th:href="@{/yourLife/userpage/{senderId}(senderId=${room.senderId})}">닉네임</a>
+                        </div>
+                    </div>
+                    <!-- 뒤쪽-->
+                    <!-- 3. 버튼 -->
+                    <a class="next-wrap" th:href="@{'/chat/room/' + ${room.roomId}}">
+                        <div class="submit-default">
+                            <img th:src="@{/img/main/submitButton.png}" alt="Submit Button Image">
+                        </div>
+                        <div class="hovers">채팅하기</div>
+                    </a>
+                </div>
+                <hr class="chatList-hr">
+            </div>
         </div>
     </div>
 </div>
 <div th:replace="~{/fragment/footer::footer}"></div>
+<script src="path/to/your/script.js"></script>
 </body>
-
 </html>
