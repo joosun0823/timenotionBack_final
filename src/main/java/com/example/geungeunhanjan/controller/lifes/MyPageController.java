@@ -231,6 +231,7 @@ public class MyPageController {
         // 좋아요 상태에 따라 처리
         if (getLikeStatusBoolean == 1) {
             myPageService.insertLike(likeVO);
+            boardService.boardViewLike(getBoardId);
         } else {
             myPageService.deleteLike(likeHeartDTO);
         }

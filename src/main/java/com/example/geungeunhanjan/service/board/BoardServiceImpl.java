@@ -161,6 +161,12 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.incViewCnt(boardId);
     }
 
+    //특정게시물 좋아여 +1
+    @Override
+    public void boardViewLike(Long boardId) {
+        boardMapper.incViewLike(boardId);
+    }
+
     //파일에 저장할 날짜 반환
     private String getUploadPath() {
         return new SimpleDateFormat("yyyy/MM/dd").format(new Date());

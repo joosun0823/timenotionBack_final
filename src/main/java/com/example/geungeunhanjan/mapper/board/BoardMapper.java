@@ -47,6 +47,9 @@ public interface BoardMapper {
     //특정 게시판 조회수 +1
     int incViewCnt(Long boardId);
 
+    //특정 게시판 좋아요 +1
+    int incViewLike(Long boardId);
+
     //특정 회원의 생일 불러오기
     LocalDateTime selectUserBirth(Long uniId);
 

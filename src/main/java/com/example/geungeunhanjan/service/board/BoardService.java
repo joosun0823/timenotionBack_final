@@ -52,6 +52,9 @@ public interface BoardService {
     //특정 게시긓 조회수 +1
     void boardIntViewCnt(Long boardId);
 
+    //특정 게시판 좋아요 +1
+    void boardViewLike(Long boardId);
+
     //게시글 파일 같이 등록하기
     void registerBoardwithFile(BoardVO boardVO, List<MultipartFile> files)  throws IOException;
 

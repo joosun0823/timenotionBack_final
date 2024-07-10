@@ -460,7 +460,6 @@
     </select>
 
     <!--    메인 오른쪽 배너 2개-->
-    <!-- mainRightBannerSelect.xml (SQL 매퍼 파일) -->
     <select id="mainRightBannerSelect" resultType="BoardMainDTO">
         SELECT
             b.board_id,
@@ -691,6 +690,13 @@
     <update id="incViewCnt" flushCache="true" >
         UPDATE GGHJ_BOARD
         SET BOARD_VIEW_COUNT = BOARD_VIEW_COUNT + 1
+        WHERE BOARD_ID = #{boardId}
+    </update>
+
+    <!-- 특정 글 좋아요 + ! -->
+    <update id="incViewLike" flushCache="true" >
+        UPDATE GGHJ_BOARD
+        SET BOARD_LIKE_COUNT = BOARD_LIKE_COUNT + 1
         WHERE BOARD_ID = #{boardId}
     </update>
 
