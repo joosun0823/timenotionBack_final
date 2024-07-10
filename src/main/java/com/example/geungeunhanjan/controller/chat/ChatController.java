@@ -46,8 +46,10 @@ public class ChatController {
 
         Long roomId = (Long) session.getAttribute("roomId");
         ChatMessageVO chatMessage = chatService.getMessageMostRecent(roomId);
+        System.out.println("★★★★★★★★★chatMessage = " + chatMessage);
         model.addAttribute("chatMessage", chatMessage);
         List<ChatRoomDTO> chatRooms = chatService.getChatRoomsByUserId(uniId);
+        System.out.println("★★★★★★★★★★chatRooms = " + chatRooms);
         model.addAttribute("chatRooms", chatRooms);
         return "/chat/chatList";
     }

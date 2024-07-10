@@ -1,3 +1,79 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Chat Application</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/chat/chatDetail.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/css/reset.css}">-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+<!--    <script defer th:src="@{/js/chat/chat.js}"></script>-->
+<!--    <script defer th:src="@{/js/chat/chat-img.js}"></script>-->
+
+<!--</head>-->
+<!--<body>-->
+<!--<div id="wrapper">-->
+<!--    <div class="container">-->
+<!--        <input type="hidden" id="roomId" th:value="${chatRoom.roomId}">-->
+<!--        <input type="hidden" id="senderId" th:value="${chatRoom.senderId}">-->
+<!--        <input type="hidden" id="receiverId" th:value="${chatRoom.receiverId}">-->
+<!--        <input type="hidden" id="loginUser" th:value="${loginUser}">-->
+
+
+<!--        <div class="main-container">-->
+<!--            <div class="left-container">-->
+<!--                &lt;!&ndash; 1. 상단 뒤로가기 버튼 &ndash;&gt;-->
+<!--                <div class="back-list-wrapper">-->
+<!--                    <a class="back-icon-img-box" th:href="@{/chat/chatting}"></a>-->
+<!--                    <a class="back-icon-text" th:href="@{/chat/chatting}">목록으로 돌아가기</a>-->
+<!--                </div>-->
+<!--                <div class="bottom-underline"></div>-->
+<!--                &lt;!&ndash; 2. 프사 / 닉네임 &ndash;&gt;-->
+<!--                <div class="profile-area-wrapper">-->
+<!--                    <div class="profile-img-box">&lt;!&ndash;이미지 들어가는 곳&ndash;&gt;</div>-->
+<!--                    <div class="profile-nickname-box" th:text="${chatInfo.senderNickname}">nickname</div>-->
+<!--                    <input type="hidden" th:value="${chatInfo.receiverId}" id="receiverId2">-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 3. 목록으로 돌아가기 &ndash;&gt;-->
+<!--                <div class="link-box"><a th:href="@{/main}">메인으로 돌아가기</a></div>-->
+<!--                &lt;!&ndash; 4. 친구의 일대기 바로가기 &ndash;&gt;-->
+<!--                <div class="link-box"><a  th:href="@{/yourLife/userpage/{receiverId}(receiverId=${chatInfo.senderId})}">친구의 일대기 바로가기</a></div>-->
+<!--            </div>-->
+<!--            <div class="chat-detail-container">-->
+<!--                <div class="chat-header">-->
+<!--                    채팅방-->
+<!--                </div>-->
+
+<!--                <div id="chat-body" class="chat-body">-->
+<!--                    <div th:each="message : ${chatMessageList}" class="chat-message"-->
+<!--                         th:classappend="${message.senderId != loginUser ? 'others' : 'user'}">-->
+<!--                        <div th:if="${message.senderId == loginUser}" class="sender"></div>-->
+<!--                   &lt;!&ndash;     <div th:if="${message.senderId != loginUser}" class="receiver">-->
+<!--                            <span class="receiver-profile">-->
+<!--                                <img th:src="${message.senderProfileSource}" alt="">-->
+<!--                            </span>-->
+<!--                            <span class="receiver-nickname" th:text="${message.senderNickname}"></span>-->
+<!--                        </div>&ndash;&gt;-->
+<!--                        <div class="message-content" th:text="${message.messageContent}"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+
+
+
+<!--                <div class="chat-footer">-->
+<!--                    <input type="text" id="text" placeholder="메세지를 입력하세요">-->
+<!--                    &lt;!&ndash; 전송 버튼 &ndash;&gt;-->
+<!--                    <button onclick="sendMessage()">submit</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -9,8 +85,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script defer th:src="@{/js/chat/chat.js}"></script>
-    <script defer th:src="@{/js/chat/chat-img.js}"></script>
-
+    <script defer th:src="@{/js/chat/chat-detail-img.js}"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -19,7 +94,6 @@
         <input type="hidden" id="senderId" th:value="${chatRoom.senderId}">
         <input type="hidden" id="receiverId" th:value="${chatRoom.receiverId}">
         <input type="hidden" id="loginUser" th:value="${loginUser}">
-
 
         <div class="main-container">
             <div class="left-container">
@@ -32,41 +106,34 @@
                 <!-- 2. 프사 / 닉네임 -->
                 <div class="profile-area-wrapper">
                     <div class="profile-img-box"><!--이미지 들어가는 곳--></div>
-                    <div class="profile-nickname-box" th:text="${chatInfo.receiverNickname}">nickname</div>
+                    <div class="profile-nickname-box" th:text="${session.uniId == chatRoom.senderId ? chatInfo.receiverNickname : chatInfo.senderNickname}">nickname</div>
                     <input type="hidden" th:value="${chatInfo.receiverId}" id="receiverId2">
                 </div>
                 <!-- 3. 목록으로 돌아가기 -->
                 <div class="link-box"><a th:href="@{/main}">메인으로 돌아가기</a></div>
                 <!-- 4. 친구의 일대기 바로가기 -->
-                <div class="link-box"><a  th:href="@{/yourLife/userpage/{receiverId}(receiverId=${chatInfo.receiverId})}">친구의 일대기 바로가기</a></div>
+                <div class="link-box">
+                    <a th:href="@{/yourLife/userpage/{receiverId}(receiverId=${session.uniId != chatRoom.senderId ? chatInfo.senderId : chatInfo.receiverId})}">
+                        친구의 일대기 바로가기
+                    </a>
+                </div>
+
             </div>
             <div class="chat-detail-container">
                 <div class="chat-header">
                     채팅방
                 </div>
-
                 <div id="chat-body" class="chat-body">
                     <div th:each="message : ${chatMessageList}" class="chat-message"
                          th:classappend="${message.senderId != loginUser ? 'others' : 'user'}">
                         <div th:if="${message.senderId == loginUser}" class="sender"></div>
-                   <!--     <div th:if="${message.senderId != loginUser}" class="receiver">
-                            <span class="receiver-profile">
-                                <img th:src="${message.senderProfileSource}" alt="">
-                            </span>
-                            <span class="receiver-nickname" th:text="${message.senderNickname}"></span>
-                        </div>-->
                         <div class="message-content" th:text="${message.messageContent}"></div>
                     </div>
                 </div>
-
-
-
-
-
                 <div class="chat-footer">
                     <input type="text" id="text" placeholder="메세지를 입력하세요">
                     <!-- 전송 버튼 -->
-                    <button onclick="sendMessage()">submit</button>
+                    <button onclick="sendMessage()" id="sendMessage"><img th:src="@{/img/main/submitButton.png}" alt="Submit Button Image"></button>
                 </div>
             </div>
         </div>

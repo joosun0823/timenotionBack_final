@@ -58,8 +58,8 @@ function sendMessage() {
     let receiverId = document.getElementById('receiverId').value;
     let senderId = document.getElementById('senderId').value;
 
-    console.log(roomId);
-    console.log(loginUser);
+    // console.log(roomId);
+    // console.log(loginUser);
 
     // 입력된 메시지 텍스트 가져오기
     let text = document.getElementById('text').value;
@@ -88,7 +88,11 @@ function sendMessage() {
 }
 
 
-
+document.getElementById("text").addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        document.getElementById("sendMessage").click();
+    }
+});
 
 
 
@@ -203,6 +207,7 @@ function Hover(){
 
     })
 }
+
 
 
 

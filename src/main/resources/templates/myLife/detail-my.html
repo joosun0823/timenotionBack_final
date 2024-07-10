@@ -1,5 +1,182 @@
 
 
+<!--&lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--&lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--&lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--&lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--&lt;!&ndash; ===================================================================== &ndash;&gt;-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+
+
+<!--<head>-->
+<!--    <meta charset="UTF-8"/>-->
+<!--    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
+<!--    <title>내가보는 디테일</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/myLife/detail-my3.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/css/main/report-modal.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/css/reset.css}"/>-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--    <script defer th:src="@{/js/myLife/detail.my3.js}"></script>-->
+<!--    <script defer type="module" th:src="@{/js/myLife/dam.js}" ></script>-->
+<!--    <script defer type="module" th:src="@{/js/myLife/module.js}" ></script>-->
+
+<!--    <style>-->
+<!--        .infant {-->
+<!--            background-color: #FFDDC1;-->
+<!--        }-->
+
+<!--        /* 유아기 */-->
+<!--        .childhood {-->
+<!--            background-color: #FFD1DC;-->
+<!--        }-->
+
+<!--        /* 유년기 */-->
+<!--        .schoolage {-->
+<!--            background-color: #C1FFD7;-->
+<!--        }-->
+
+<!--        /* 아동기 */-->
+<!--        .adolescence {-->
+<!--            background-color: #C1C1FF;-->
+<!--        }-->
+
+<!--        /* 청소년기 */-->
+<!--        .youngadult {-->
+<!--            background-color: #D1FFC1;-->
+<!--        }-->
+
+<!--        /* 청년기 */-->
+<!--        .midlife {-->
+<!--            background-color: #FFD7C1;-->
+<!--        }-->
+
+<!--        /* 중년기 */-->
+<!--        .senior {-->
+<!--            background-color: #E1C1FF;-->
+<!--        }-->
+
+<!--        /* 노년기 */-->
+<!--    </style>-->
+
+<!--</head>-->
+<!--<body>-->
+<!--<div th:replace="~{/fragment/header::header}"></div>-->
+<!--<div id="wrapper">-->
+<!--    <main>-->
+<!--        <div class="container">-->
+<!--            <input type="hidden" id="uniId" th:value="${session.uniId}">-->
+<!--            &lt;!&ndash;1. 상단 날짜 / 수정 삭제 버튼 -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+<!--            <div class="wrapper-date-etc">-->
+<!--                <div class="box-date-left" th:text="${boards.boardCreatedDate != null ? '작성일 :  ' + #temporals.format(boards.boardCreatedDate, 'yy년 MM월 dd일') : '날짜 없음'}">-->
+<!--                </div>-->
+<!--                <input type="hidden" id="boardId" th:value="${boards.boardId}">-->
+<!--                <input type="hidden" id="boardUserId" th:value="${boards.userId}">-->
+<!--                <div class="box-date-right">-->
+<!--                    <th:block th:if="${boards.userId == session.uniId}">-->
+<!--                        <button class="btn-modify" th:data-id="${boards.boardId}">수정</button>-->
+<!--                        <button type="button" class="btn-remove" th:data-id="${boards.boardId}">삭제</button>-->
+<!--                    </th:block>-->
+
+<!--                </div>-->
+
+<!--            </div>-->
+<!--            &lt;!&ndash;2. 타이틀 -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+<!--            <div class="wrapper-title" th:text="${boards.boardTitle}">-->
+<!--            </div>-->
+<!--            &lt;!&ndash;3. 프로필 영역 / 하트 / 공개  -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+<!--            <div class="wrapper-profile">-->
+<!--                <input type="hidden" th:value="${boards.userId}" id="uniIdForFile">-->
+<!--                <div class="box-profile-img">-->
+<!--                    <a class="box-profile-img-a" th:if="${boards.userId == session.uniId}" th:href="@{/myLife}"></a>-->
+<!--                    <a class="box-profile-img-a" th:unless="${boards.userId == session.uniId}" th:href="@{/yourLife/userpage/{userId}(userId=${boards.userId})}"></a>-->
+<!--                </div>-->
+<!--                <div class="box-profile-nickname">-->
+<!--                    <a  th:if="${boards.userId == session.uniId}" th:href="@{/myLife}" id="get-user-like-id" th:text="${userNickname}">닉네임</a>-->
+<!--                    <a  th:unless="${boards.userId == session.uniId}" th:href="@{/yourLife/userpage/{userId}(userId=${boards.userId})}" id="get-user-like-id2" th:text="${userNickname}">닉네임</a>-->
+<!--                </div>-->
+<!--                <p id="user-lifecycle-check" style="display: none" th:text="${boards.boardLifeCycle}"></p>-->
+
+<!--                <div><img th:src="@{/img/myLife/sas detail_heart.png}" alt="하트" class="box-profile-heart"-->
+<!--                          id="heartImage"></div>-->
+
+<!--                &lt;!&ndash;    좋아요 상태 체크하는 p태그 &ndash;&gt;-->
+<!--                <p id="get-user-like-status" th:text="${likeStatus}"></p>-->
+
+<!--            </div>-->
+<!--            <div class="bold-underline"></div>-->
+<!--            &lt;!&ndash;4. 컨텐츠 영역  -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+<!--            <div class="wrapper-content">-->
+<!--                <div class="post-images">-->
+<!--                    &lt;!&ndash; 이미지 예시 &ndash;&gt;-->
+<!--                    &lt;!&ndash; /이미지 예시 &ndash;&gt;-->
+<!--                </div>-->
+<!--                <div class="post-content" th:text="${boards.boardContent}"></div>-->
+<!--            </div>-->
+<!--            <div class="bold-underline"></div>-->
+<!--            &lt;!&ndash; 00. 댓글영역 (까먹고 나중에 추가함;;) &ndash;&gt;-->
+<!--            <div class="wrapper-reply-write">-->
+<!--                <div class="box-count-reply">-->
+<!--                    &lt;!&ndash;<span>댓글</span>&ndash;&gt;&lt;!&ndash;<span id="count-reply">(00)</span>&ndash;&gt;-->
+<!--                </div>-->
+<!--                <div class="box-reply-write">-->
+<!--                    <textarea name="" id="comment-content" cols="30" rows="10" placeholder="댓글을 입력하세요"></textarea>-->
+<!--                    <div class="box-btn-reply-btn"><button class="btn-reply-btn">입력</button></div>-->
+<!--                </div>-->
+
+
+<!--            </div>-->
+<!--            &lt;!&ndash;5. 댓글영역   -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+<!--            <div class="wrapper-reply">-->
+
+<!--            </div> &lt;!&ndash;댓글영역 닫는 태그 &ndash;&gt;-->
+
+
+<!--            &lt;!&ndash; 메인 신고 모달 &ndash;&gt;-->
+<!--            <article class="wrapper-report">-->
+<!--                <form class="report">-->
+<!--                    <input type="hidden" name="commentId" value="">-->
+<!--                    <input type="hidden" name="userId" value="">-->
+
+<!--                    <div class="box-report-input">-->
+<!--                        <div class="report-title-r">신고하기</div>-->
+<!--                        <label for="a"><input type="radio" name="reportReason" value="욕설" id="a"/>욕설 및 비방</label>-->
+<!--                        <label for="b"><input type="radio" name="reportReason" value="스팸" id="b"/>스팸</label>-->
+<!--                        <label for="c"><input type="radio" name="reportReason" value="음란물" id="c"/>음란물</label>-->
+<!--                        <label for="d"><input type="radio" name="reportReason" value="중복글" id="d"/>중복 게시물 도배</label>-->
+<!--                        <label for="e"><input type="radio" name="reportReason" value="부정확정보" id="e"/>부정확한 정보</label>-->
+<!--                        <label for="f"><input type="radio" name="reportReason" value="도용" id="f"/>도용</label>-->
+<!--                        <label for="g"><input type="radio" name="reportReason" value="기타" id="g"/>기타-->
+<!--                            <input type="text" name="reportReason" class="report-reason" maxlength="100" placeholder="기타 사유를 적어주세요.">-->
+<!--                        </label>-->
+<!--                        <div class="report-btn-box">-->
+<!--                            <button type="submit" class="report-btn-report">신고하기</button>-->
+<!--                            <button type="button" class="report-btn-close">닫기</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </article>-->
+<!--            &lt;!&ndash; 신고모달 닫기  &ndash;&gt;-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //wrapper &ndash;&gt;-->
+
+
+<!--        &lt;!&ndash;</div>&ndash;&gt;-->
+<!--    </main>-->
+
+<!--    <div th:replace="~{/fragment/footer::footer}"></div>-->
+<!--</div>-->
+
+
+<!--</body>-->
+
+<!--</html>-->
+
+
+
 <!-- ===================================================================== -->
 <!-- ===================================================================== -->
 <!-- ===================================================================== -->
