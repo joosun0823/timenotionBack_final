@@ -750,9 +750,36 @@ document.getElementById('phone-button').addEventListener('click', function() {
       });
 });
 
+// ---------------------------------------------------------
 
+document.querySelector('.join').addEventListener('click', function() {
+  const email = document.getElementById('email-input').value;
+  const nickname = document.getElementById('join-nickname-input').value;
+  const phone = document.getElementById('phone-input').value;
 
-
+  fetch('/api/join', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email: email, nickname: nickname, phone: phone })
+  })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => { throw new Error(text); });
+        }
+        return response.text();
+      })
+      .then(data => {
+        alert('회원가입이 완료되었습니다.');
+        // 회원가입 성공 후 처리 (예: 페이지 리디렉션)
+      })
+      .catch(error => {
+        alert(error.message);
+        // 잘못된 입력일 경우 현재 페이지로 리턴
+        window.location.reload();
+      });
+});
 
 
 

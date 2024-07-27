@@ -271,7 +271,13 @@
                     <a class="box-profile-img-a" th:if="${boards.userId == session.uniId}" th:href="@{/myLife}"></a>
                     <a class="box-profile-img-a" th:unless="${boards.userId == session.uniId}" th:href="@{/yourLife/userpage/{userId}(userId=${boards.userId})}"></a>
                 </div>
-                <div class="box-profile-nickname"><a th:href="@{/yourLife/userpage/{userId}(userId=${boards.userId})}" id="get-user-like-id" th:text="${userNickname}">닉네임</a></div>
+                <!--                <div class="box-profile-nickname">-->
+                <!--                    <a th:href="@{/yourLife/userpage/{userId}(userId=${boards.userId})}" id="get-user-like-id" th:text="${userNickname}">닉네임</a>-->
+                <!--                </div>-->
+                <div class="box-profile-nickname">
+                    <a  th:if="${boards.userId == session.uniId}" th:href="@{/myLife}" id="get-user-like-id" th:text="${userNickname}">닉네임</a>
+                    <a  th:unless="${boards.userId == session.uniId}" th:href="@{/yourLife/userpage/{userId}(userId=${boards.userId})}" id="get-user-like-id2" th:text="${userNickname}">닉네임</a>
+                </div>
                 <p id="user-lifecycle-check" style="display: none" th:text="${boards.boardLifeCycle}"></p>
 
                 <div><img th:src="@{/img/myLife/sas detail_heart.png}" alt="하트" class="box-profile-heart"
